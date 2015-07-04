@@ -25,10 +25,20 @@ https://github.com/tkinjo/heroku-buildpack-jscl
 
 
 
+
+Generated `~/public/js/jscl.js`.
+
+
+
+
+
+
 Not Implemented
 ---
 
  - Auto update.
+ - Change output directory by ENV_VAR.
+ - Minify.
 
 
 
