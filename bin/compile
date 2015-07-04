@@ -1,0 +1,106 @@
+#!/usr/bin/env bash
+# bin/compile <build-dir> <cache-dir> <env-dir>
+
+
+
+
+
+### Configure directories
+
+BUILD_DIR=${1:-}
+CACHE_DIR=${2:-}
+ENV_DIR=${3:-}
+
+
+
+
+
+
+# make directory
+# ---
+
+mkdir $BUILD_DIR/.tmp
+mkdir $BUILD_DIR/local
+
+mkdir $BUILD_DIR/public/js
+
+
+
+
+
+# export vars
+# ---
+
+PATH=$BUILD_DIR/local/bin:$PATH
+export PATH
+
+
+
+LD_LIBRARY_PATH=$BUILD_DIR/local/lib:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH
+
+LIBRARY_PATH=$BUILD_DIR/local/lib:$LIBRARY_PATH
+export LIBRARY_PATH
+
+
+
+SBCL_HOME=$BUILD_DIR/local/lib/sbcl
+export SBCL_HOME
+
+
+
+
+
+
+# builded check
+# ---
+
+if [ -f $BUILD_DIR/public/js/jscl.js ]
+then
+  echo "builded"
+  exit 0
+fi
+
+
+if [ -f $CACHE_DIR/jscl.js ]
+then
+  echo "builded CACHE_DIR"
+  cp $CACHE_DIR/jscl.js $BUILD_DIR/public/js/
+  exit 0
+fi
+
+
+
+
+# install sbcl
+# ---
+
+if [ -f sbcl ]
+then
+  echo "installed sbcl"
+else
+  curl -L http://prdownloads.sourceforge.net/sbcl/sbcl-1.2.13-x86-64-linux-binary.tar.bz2 > sbcl-1.2.13-x86-64-linux-binary.tar.bz2
+
+  bzip2 -cd sbcl-1.2.13-x86-64-linux-binary.tar.bz2 | tar xvf -
+
+  cd sbcl-1.2.13-x86-64-linux
+
+  INSTALL_ROOT=$BUILD_DIR/local sh install.sh
+fi
+
+
+
+
+# build jscl
+# ---
+
+cd $BUILD_DIR/.tmp
+
+git clone https://github.com/davazp/jscl.git
+
+cd jscl
+
+sh make.sh
+
+cp jscl.js $BUILD_DIR/public/js/
+cp jscl.js $CACHE_DIR/jscl.js
