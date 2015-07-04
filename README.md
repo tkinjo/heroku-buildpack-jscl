@@ -18,7 +18,7 @@ $ heroku buildpacks:set https://github.com/ddollar/heroku-buildpack-multi
 `.buildpacks`
 
 ```
-https://github.com/heroku/heroku-buildpack-node
+https://github.com/heroku/heroku-buildpack-nodejs
 https://github.com/tkinjo/heroku-buildpack-jscl
 ```
 
